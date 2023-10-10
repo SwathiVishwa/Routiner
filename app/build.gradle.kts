@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -5,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.app.routiner"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.app.routiner"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -60,8 +62,22 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
 
+    //Material
+    implementation("com.google.android.material:material:1.9.0")
+    implementation ("androidx.compose.material:material:1.0.0")
+
+    //For Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.2")
+
     //Splash Screen
 //    implementation ("androidx.core:core-splashscreen:1.0")
+//Session Manager
+    implementation("com.google.dagger:hilt-android:2.48")
+//    kapt("com.google.dagger:hilt-android-compiler:2.48")
+
+    // DataStore Preferences
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

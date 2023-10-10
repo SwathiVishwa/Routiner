@@ -3,59 +3,55 @@ package com.app.routiner
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.material.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.app.routiner.ui.bottomnav.BottomNavBar
+import com.app.routiner.ui.navigation.NavRoute
+import com.app.routiner.ui.navigation.navGraph
 import com.app.routiner.ui.theme.RoutinerTheme
-import com.app.routiner.ui.theme.radial1
-import com.app.routiner.ui.theme.radial2
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SplashActivity : ComponentActivity() {
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             RoutinerTheme {
-                SplashScreen()
+                setUpNavigation(onBackPressedDispatcher)
             }
         }
     }
 
-    @Composable
-    @Preview
-    private fun SplashScreen() {
-        val radialGradient = Brush.radialGradient(
-            colors = listOf(radial1, radial2)
-        )
+}
 
-        Column(
-            Modifier
-                .background(radialGradient)
-                .fillMaxSize()
-                .padding(10.dp),
-            verticalArrangement = Arrangement.Center, horizontalAlignment = CenterHorizontally
-        ) {
-
-            Image(
-                painter = painterResource(id = R.drawable.ic_logo),
-                contentDescription = "App Logo",
-                Modifier.size(300.dp),
-                alignment = Alignment.Center
-            )
-
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun setUpNavigation(onBackPressedDispatcher: OnBackPressedDispatcher) {
+    val navController = rememberNavController()
+    Scaffold(backgroundColor = Color.LightGray, bottomBar = {
+        BottomNavBar(navController, onBackPressedDispatcher) {}
+    }, content = { paddingValues ->
+        ScaffoldDefaults.contentWindowInsets
+        Box(modifier = Modifier.padding(paddingValues)) {
+            NavHost(
+                navController = navController,
+                route = NavRoute.SplashScreenRoute.route,
+                startDestination = NavRoute.SplashScreenRoute.route
+            ) {
+                navGraph(navController)
+            }
         }
-    }
+    })
 }
